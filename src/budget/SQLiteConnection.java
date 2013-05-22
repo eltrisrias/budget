@@ -25,7 +25,7 @@ public class SQLiteConnection {
             } catch (IllegalAccessException ex) {
                 Logger.getLogger(SQLiteConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            String url = "jdbc:sqlite:/media/INTENSO USB/testdb.db";
+            String url = "jdbc:sqlite:testdb.db";
             if(con==null) con= DriverManager.getConnection(url);
             return con;
         }catch(SQLException ex){

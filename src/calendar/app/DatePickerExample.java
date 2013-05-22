@@ -104,10 +104,12 @@ public class DatePickerExample extends javax.swing.JFrame {
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
       Calendar cal = mydatechooser.getCalendar();
+      long inte = cal.getTimeInMillis();
       int datevar = cal.get(Calendar.DATE);
       int monthvar = cal.get(Calendar.MONTH);
      int yearvar = cal.get(Calendar.YEAR);
-      outputtextbox.setText("Date is " + datevar + ", Month is " + monthvar + " and Year is "+ yearvar + ".");
+//      outputtextbox.setText("Day: " + datevar + ", Month: " + monthvar + " Year is "+ yearvar + ".");
+      outputtextbox.setText(""+inte);
   }
 
 /**

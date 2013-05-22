@@ -16,7 +16,7 @@ public class SqlBefehl {
         stmt.executeUpdate("insert into SQLiteProbe values ('"+name+"',"+betrag+", '"+ grund+"')");
     }
     
-    public static void insertMaintable(String name, double betrag, java.sql.Date date, String grund) throws SQLException{
+    public static void insertMaintable(String name, double betrag, long date, String grund) throws SQLException{
         Connection con = SQLiteConnection.getConnection();
         Statement stmt = con.createStatement();
         stmt.executeUpdate("insert into MAINTABLE "
