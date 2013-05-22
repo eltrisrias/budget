@@ -9,6 +9,9 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.demo.JCalendarDemo;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,11 +34,18 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableModel;
 import org.jfree.chart.*;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.jdbc.JDBCCategoryDataset;
 import org.jfree.data.jdbc.JDBCXYDataset;
+import org.jfree.data.xy.XYDataset;
 
 
 
@@ -112,7 +122,10 @@ public class GUIBudget extends javax.swing.JFrame {
         txtfldGeldgruppeInsert = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pnlGrafik = new javax.swing.JPanel();
-        btnCraphRenew = new javax.swing.JButton();
+        btnLineChart = new javax.swing.JButton();
+        btnBarChart = new javax.swing.JButton();
+        btnLineChartDate = new javax.swing.JButton();
+        pnlOnlyGraph = new javax.swing.JPanel();
         pnlTable = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         FIO = new javax.swing.JTable();
@@ -250,6 +263,7 @@ public class GUIBudget extends javax.swing.JFrame {
         });
 
         txtErgebnis.setEditable(false);
+        txtErgebnis.setEnabled(false);
 
         buttonGroup1.add(rbtnAusgabe);
         rbtnAusgabe.setForeground(new java.awt.Color(255, 0, 0));
@@ -325,7 +339,7 @@ public class GUIBudget extends javax.swing.JFrame {
                     .addComponent(lblEuro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fldBetrag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(lblDatum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mydatechooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -365,6 +379,7 @@ public class GUIBudget extends javax.swing.JFrame {
             }
         });
 
+        txtFldNameErgebn.setEditable(false);
         txtFldNameErgebn.setEnabled(false);
 
         lblNameInput.setText("Neue Name eingeben:");
@@ -414,7 +429,7 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(btnNameDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtFldNameErgebn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addComponent(lblNameInput)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtFldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -467,12 +482,12 @@ public class GUIBudget extends javax.swing.JFrame {
         lstGeldgruppe.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(lstGeldgruppe);
 
-        txtfldGeldGruppeInfo.setEditable(false);
         txtfldGeldGruppeInfo.setToolTipText("");
+        txtfldGeldGruppeInfo.setEnabled(false);
 
         jLabel1.setText("Neue Geldgruppe eingeben:");
 
-        txtfldGeldgruppeInfo.setEditable(false);
+        txtfldGeldgruppeInfo.setEnabled(false);
 
         txtfldGeldgruppeInsert.setEditable(false);
 
@@ -526,34 +541,59 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(btnGeldGruppeEinfuegen)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtfldGeldgruppeInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Geldgruppe", pnlGeldgruppen);
 
         pnlGrafik.setBorder(javax.swing.BorderFactory.createTitledBorder("Gried"));
 
-        btnCraphRenew.setText("Grafik aktualisieren");
-        btnCraphRenew.addActionListener(new java.awt.event.ActionListener() {
+        btnLineChart.setText("LineChart");
+        btnLineChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCraphRenewActionPerformed(evt);
+                btnLineChartActionPerformed(evt);
             }
         });
+
+        btnBarChart.setText("BarChart");
+        btnBarChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBarChartActionPerformed(evt);
+            }
+        });
+
+        btnLineChartDate.setText("Dates");
+        btnLineChartDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLineChartDateActionPerformed(evt);
+            }
+        });
+
+        pnlOnlyGraph.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout pnlGrafikLayout = new javax.swing.GroupLayout(pnlGrafik);
         pnlGrafik.setLayout(pnlGrafikLayout);
         pnlGrafikLayout.setHorizontalGroup(
             pnlGrafikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlGrafikLayout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(btnCraphRenew, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(106, 106, 106)
+                .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addComponent(btnLineChartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(pnlOnlyGraph, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlGrafikLayout.setVerticalGroup(
             pnlGrafikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGrafikLayout.createSequentialGroup()
-                .addContainerGap(540, Short.MAX_VALUE)
-                .addComponent(btnCraphRenew)
+                .addComponent(pnlOnlyGraph, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                .addGap(15, 15, 15)
+                .addGroup(pnlGrafikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLineChart)
+                    .addComponent(btnBarChart)
+                    .addComponent(btnLineChartDate))
                 .addContainerGap())
         );
 
@@ -587,10 +627,10 @@ public class GUIBudget extends javax.swing.JFrame {
         pnlTableLayout.setHorizontalGroup(
             pnlTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTableLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlTableLayout.createSequentialGroup()
+                .addGap(144, 144, 144)
                 .addComponent(btnTableAktual, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(125, 125, 125))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlTableLayout.setVerticalGroup(
             pnlTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -598,7 +638,7 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTableAktual)
-                .addGap(0, 109, Short.MAX_VALUE))
+                .addGap(0, 113, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Tabelle", pnlTable);
@@ -647,24 +687,28 @@ public class GUIBudget extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
             .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         jTabbedPane3.getAccessibleContext().setAccessibleName("Personen verwalten");
         jTabbedPane1.getAccessibleContext().setAccessibleName("");
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSpeichernActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpeichernActionPerformed
         // TODO add your handling code here:
+        setTextNull();
         String name = (String)cmbxName.getSelectedItem();
         System.out.println(name);
         Calendar cal = mydatechooser.getCalendar();
+        long inte = cal.getTimeInMillis();
+        System.out.println(inte);
         try{
             double betrag = Double.parseDouble(fldBetrag.getText());
-
+            System.out.println(betrag);
             String grund = (String)cmbxGrund.getSelectedItem();
 //            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 //            Date date = null;
@@ -673,13 +717,13 @@ public class GUIBudget extends javax.swing.JFrame {
             int monat=Integer.parseInt(fldDatumMonat.getText())-1;
             int tag=Integer.parseInt(fldDatumTag.getText());
             * */
-            int jahr = cal.get(Calendar.YEAR)-1900;
-            int monat = cal.get(Calendar.MONTH);
-            int tag = cal.get(Calendar.DAY_OF_MONTH);
-            java.util.Date utilDate = new java.util.Date(jahr, monat, tag);
-            System.out.println("utilDate:" + utilDate);
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            System.out.println("sqlDate:" + sqlDate);
+//            int jahr = cal.get(Calendar.YEAR)-1900;
+//            int monat = cal.get(Calendar.MONTH);
+//            int tag = cal.get(Calendar.DAY_OF_MONTH);
+//            java.util.Date utilDate = new java.util.Date(jahr, monat, tag);
+//            System.out.println("utilDate:" + utilDate);
+//            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+//            System.out.println("sqlDate:" + sqlDate);
 //            Date date1 = new Date(fldDatum.getText());            
             if (name.length() ==0 || betrag <=0 ||grund.length() ==0) {
                 txtErgebnis.setText("Tragen Sie in alle Fenstern ein!");
@@ -687,7 +731,7 @@ public class GUIBudget extends javax.swing.JFrame {
             else {
                 try {
 //                    SqlBefehl.insert(name, betrag, grund);
-                    SqlBefehl.insertMaintable(name, betrag, sqlDate, grund);
+                    SqlBefehl.insertMaintable(name, betrag, inte, grund);
                     txtErgebnis.setText("Ihr Datensatz wurde aufgenommen!");
                 } catch (SQLException ex) {
                     Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
@@ -699,11 +743,12 @@ public class GUIBudget extends javax.swing.JFrame {
 //        cmbxName.set;
         fldBetrag.setText("");
 //        cmbxGrund.;
+        System.out.println("Hello, Git!");
         
     }//GEN-LAST:event_btnSpeichernActionPerformed
 
     private void btnTableAktualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableAktualActionPerformed
-        try {
+     try {
             Connection con = SQLiteConnection.getConnection();
             TableModel mod = new MyTableModel(con, "MAINTABLE");
             
@@ -725,6 +770,7 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiNameDeleteActionPerformed
 
     private void btnNameDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNameDeleteActionPerformed
+        setTextNull();
         if(listName.getSelectedValue() == null){
             txtFldNameErgebn.setText("Auswahl ist leer");
         }
@@ -749,20 +795,22 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiNameInsertActionPerformed
 
     private void btnNameOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNameOKActionPerformed
-         try {
+        try {
             Connection con = SQLiteConnection.getConnection();
             MyComboBoxModelName cbm =new MyComboBoxModelName(con, "SQLiteProbe");
             List name2 = Arrays.asList(cbm.names);
             if(name2.contains(txtFldName.getText())){
                 txtFldNameResult.setText("\""+txtFldName.getText()+"\" existiert bereits!");
-                txtFldName.setText("");
+                setTextNull(); 
             }
             if(txtFldName.getText().isEmpty()){
+                setTextNull(); 
                 txtFldNameResult.setText("Feld darf nicht leer sein!");
             }
             else{
                 try {
                     SqlBefehl.insertName(txtFldName.getText());
+                    setTextNull(); 
                     txtFldNameResult.setText("Ihr Datensatz wurde aufgenommen!");
                     txtFldName.setText("");
                     listName.setModel(new MyComboBoxModelName(con, "SQLiteProbe"));
@@ -782,30 +830,8 @@ public class GUIBudget extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnNameOKActionPerformed
 
-    private void btnCraphRenewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCraphRenewActionPerformed
-        try{
-            String query = "select  date, betrag, name from MAINTABLE";
-            Connection con = SQLiteConnection.getConnection();
-            JDBCCategoryDataset dataset = new JDBCCategoryDataset(con, query);
-//            JFreeChart chart = ChartFactory.createLineChart("Query Chart", "Datum ", "Betrag", dataset, rootPaneCheckingEnabled, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
-            JFreeChart chart = ChartFactory.createLineChart("Query Chart", "Datum ", "Betrag", dataset, PlotOrientation.VERTICAL, rootPaneCheckingEnabled, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
-            BarRenderer renderer = null;
-            CategoryPlot plot = null;
-            renderer = new BarRenderer();
-//            ChartUtilities.saveChartAsJPEG(new File("C:/chart.jpg"),chart,400, 300);
-
-//            ChartFrame frame = new ChartFrame("Query Chart", chart);
-            ChartPanel frame = new ChartPanel(chart);
-            pnlGrafik.add(frame);
-            frame.setVisible(true);
-            frame.setSize(650, 400);
-            
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }//GEN-LAST:event_btnCraphRenewActionPerformed
-
     private void rbtnAusgabeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnAusgabeActionPerformed
+        setTextNull();
         if(rbtnAusgabe.isSelected()){
             lblGrund.setText("Ordnen Sie die Ausgabe ein!");
             pnlGeldfluss.repaint();
@@ -822,6 +848,7 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_rbtnAusgabeActionPerformed
 
     private void rbtnEinnahmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnEinnahmeActionPerformed
+        setTextNull();
         if(rbtnEinnahme.isSelected()){
             lblGrund.setText("Ordnen Sie die Einnahme ein!");
             pnlGeldfluss.repaint();
@@ -861,6 +888,7 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_rbtnEinnahmeVerwaltActionPerformed
 
     private void btnGeldGruppeLoeschenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeldGruppeLoeschenActionPerformed
+        setTextNull();
         if(lstGeldgruppe.getSelectedValue()== null){
             txtfldGeldGruppeInfo.setText("Auswahl ist leer!");;
         }
@@ -877,6 +905,7 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGeldGruppeLoeschenActionPerformed
 
     private void btnGeldGruppeEinfuegenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeldGruppeEinfuegenActionPerformed
+        setTextNull();
         try {         
             Connection con = SQLiteConnection.getConnection();
             MyComboBoxModelGrund cbm = new MyComboBoxModelGrund(con, "SQLiteProbe");
@@ -908,11 +937,113 @@ public class GUIBudget extends javax.swing.JFrame {
         }
             
     }//GEN-LAST:event_btnGeldGruppeEinfuegenActionPerformed
-    
-//    private ArrayList<String> nameList(){
-//        
-//        return null;
-//    }
+
+    private void btnLineChartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineChartDateActionPerformed
+        try {
+            // TODO add your handling code here:
+            DataSetModel mod = new DataSetModel(3);
+            XYDataset datasetXY = mod.datasetXY;
+            JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                "Legal & General Unit Trust Prices", // title
+                "Date",  // x-axis label
+                "Price Per Unit", // y-axis label
+                datasetXY, // data
+                true, // create legend?
+                true, // generate tooltips?
+                false // generate URLs?
+            );
+            XYPlot plot = (XYPlot) chart.getPlot();
+            XYItemRenderer r = plot.getRenderer();
+            ChartPanel frame = new ChartPanel(chart);
+            pnlOnlyGraph.removeAll();
+            pnlOnlyGraph.add(frame,  BorderLayout.CENTER);
+//            pnlOnlyGraph.setLayout(new BorderLayout());
+            //            frame.setLayout(new BorderLayout());
+            frame.setVisible(true);
+            pnlOnlyGraph.validate();
+//            frame.setSize(650, 400);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnLineChartDateActionPerformed
+
+    private void btnBarChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarChartActionPerformed
+        try {
+            // TODO add your handling code here:
+            DataSetModel mod = new DataSetModel(2);
+            DefaultCategoryDataset dataset = mod.dataset;
+            JFreeChart chart = ChartFactory.createBarChart3D("Bar Chart","Days","Value", dataset, PlotOrientation.VERTICAL,true,true,false);
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            CategoryAxis axis = plot.getDomainAxis();
+            axis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
+
+            plot.setBackgroundPaint(Color.lightGray);
+            plot.setRangeGridlinePaint(Color.white);
+
+            BarRenderer renderer = (BarRenderer) plot.getRenderer();
+            renderer.setDrawBarOutline(false);
+            renderer.setItemMargin(0.1);
+
+            ChartPanel frame = new ChartPanel(chart);
+            pnlOnlyGraph.removeAll();
+            pnlOnlyGraph.add(frame,  BorderLayout.CENTER);
+//            pnlOnlyGraph.setLayout(new BorderLayout());
+            //            frame.setLayout(new BorderLayout());
+            
+            frame.setVisible(true);
+            pnlOnlyGraph.validate();
+//            frame.setSize(650, 400);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnBarChartActionPerformed
+
+    private void btnLineChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineChartActionPerformed
+        try{
+            DataSetModel mod = new DataSetModel(1);
+            DefaultCategoryDataset dataset = mod.dataset;
+            JFreeChart chart = ChartFactory.createLineChart("Query Chart", "Datum ", "Betrag", dataset, PlotOrientation.VERTICAL, rootPaneCheckingEnabled, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            CategoryAxis axis = plot.getDomainAxis();
+            axis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
+
+            BarRenderer renderer = null;
+            //            CategoryPlot plot = null;
+            renderer = new BarRenderer();
+            //            ChartUtilities.saveChartAsJPEG(new File("C:/chart.jpg"),chart,400, 300);
+
+            //            ChartFrame frame = new ChartFrame("Query Chart", chart);
+            pnlOnlyGraph.removeAll();
+            ChartPanel frame = new ChartPanel(chart);
+            
+            pnlOnlyGraph.add(frame, BorderLayout.CENTER);
+//            pnlOnlyGraph.setLayout(new BorderLayout());
+            frame.setVisible(true);
+            pnlOnlyGraph.validate();
+//            frame.setSize(650, 400);
+
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnLineChartActionPerformed
+
+    private void setTextNull(){
+        txtErgebnis.setText("");
+        txtFldName.setText("");
+        txtFldNameErgebn.setText("");
+        txtFldNameResult.setText("");
+        txtfldGeldGruppeInfo.setText("");
+        txtfldGeldgruppeInfo.setText("");
+        txtfldGeldgruppeInsert.setText("");
+        
+    }
     
     /**
      * @param args the command line arguments
@@ -950,9 +1081,11 @@ public class GUIBudget extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable FIO;
-    private javax.swing.JButton btnCraphRenew;
+    private javax.swing.JButton btnBarChart;
     private javax.swing.JButton btnGeldGruppeEinfuegen;
     private javax.swing.JButton btnGeldGruppeLoeschen;
+    private javax.swing.JButton btnLineChart;
+    private javax.swing.JButton btnLineChartDate;
     private javax.swing.JButton btnNameDelete;
     private javax.swing.JButton btnNameOK;
     private javax.swing.JButton btnSpeichern;
@@ -996,6 +1129,7 @@ public class GUIBudget extends javax.swing.JFrame {
     private javax.swing.JPanel pnlGeldfluss;
     private javax.swing.JPanel pnlGeldgruppen;
     private javax.swing.JPanel pnlGrafik;
+    private javax.swing.JPanel pnlOnlyGraph;
     private javax.swing.JPanel pnlPerAdd;
     private javax.swing.JPanel pnlPerDel;
     private javax.swing.JPanel pnlPersonen;
