@@ -6,23 +6,24 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.AbstractTableModel;
 
 
-public class MyTableModel extends AbstractTableModel{
+public class MyTableModel2 extends AbstractTableModel{
         private Object[][] contents; //speichert daten
         private String[] columnNames; // speichert imena stolbzov
         private Class[] columnClasses; // speichert tipi stolbzov
         private String[] dateArray;
         
-        public MyTableModel(){
+        public MyTableModel2(){
             
         }
         
-        public MyTableModel(Connection conn, String tableName) throws SQLException{
+        public MyTableModel2(Connection conn, String tableName) throws SQLException{
             super();
             getTableContents(conn, tableName);
         }
@@ -34,33 +35,33 @@ public class MyTableModel extends AbstractTableModel{
             ArrayList colTypeList = new ArrayList(); // spisok tipov stolbzov
 
 /*************** Kommentieren, wenn unten der switch-case Zeilen zu auskomentieren ist           */
-            colTypeList.add(String.class);
-            colTypeList.add(String.class);
-            colTypeList.add(Long.class);
-            colTypeList.add(String.class);
+//            colTypeList.add(String.class);
+//            colTypeList.add(String.class);
+//            colTypeList.add(Long.class);
+//            colTypeList.add(String.class);
 
             while (rs.next()){
                 if(rs.getString("COLUMN_NAME").equals("name")||rs.getString("COLUMN_NAME").equals("betrag")||rs.getString("COLUMN_NAME").equals("date")||rs.getString("COLUMN_NAME").equals("grund")){
 
                 colNamesList.add(rs.getString("COLUMN_NAME"));//dobavit v spisok imja stolbza
 /*************** Auskommentieren, wenn oben 4 Zeilen zu löschen sind           */
-//                int dbType = rs.getInt("DATA_TYPE");// opredelit tip stolbza
+                int dbType = rs.getInt("DATA_TYPE");// opredelit tip stolbza
 
-//                switch(dbType){
-//                    case Types.INTEGER: colTypeList.add(Integer.class); 
-//                        break;
-//                    case Types.FLOAT: colTypeList.add(Float.class); 
-//                        break;
-//                    case Types.DOUBLE:
-//                    case Types.REAL: colTypeList.add(Double.class);
-//                        break;
-//                    case Types.DATE:
-//                    case Types.TIME:
-//                    case Types.TIMESTAMP: colTypeList.add(java.sql.Date.class);
-//                        break;
-//                    default: colTypeList.add(String.class);   
-//                        break;
-//                }
+                switch(dbType){
+                    case Types.INTEGER: colTypeList.add(Integer.class); 
+                        break;
+                    case Types.FLOAT: colTypeList.add(Float.class); 
+                        break;
+                    case Types.DOUBLE:
+                    case Types.REAL: colTypeList.add(Double.class);
+                        break;
+                    case Types.DATE:
+                    case Types.TIME:
+                    case Types.TIMESTAMP: colTypeList.add(java.sql.Date.class);
+                        break;
+                    default: colTypeList.add(String.class);   
+                        break;
+                }
                 }
                 else{}
             }   

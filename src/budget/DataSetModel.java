@@ -46,7 +46,7 @@ public class DataSetModel {
      * @throws SQLException
      */
     public DataSetModel(int swtch) throws SQLException, ParseException {
-        MyTableModel mod = new MyTableModel(conn, "MAINTABLE");        
+        MyTableModel2 mod = new MyTableModel2(conn, "MAINTABLE");        
         Object[][] data=mod.getContents().clone();        
         switch(swtch){
             case 1: // value,name,date for BarChart

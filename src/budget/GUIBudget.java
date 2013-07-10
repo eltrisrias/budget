@@ -4,47 +4,29 @@
  */
 package budget;
 
-import com.toedter.calendar.IDateEditor;  
-import com.toedter.calendar.JTextFieldDateEditor;
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.demo.JCalendarDemo;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableModel;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.jdbc.JDBCCategoryDataset;
-import org.jfree.data.jdbc.JDBCXYDataset;
 import org.jfree.data.xy.XYDataset;
 
 
@@ -132,12 +114,7 @@ public class GUIBudget extends javax.swing.JFrame {
         btnTableAktual = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jmiNameDelete = new javax.swing.JMenuItem();
-        jmiNameInsert = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jmiAusgabeDelete = new javax.swing.JMenuItem();
-        jmiAusgabeInsert = new javax.swing.JMenuItem();
+        ExitMI = new javax.swing.JMenuItem();
 
         createPerson.setMinimumSize(new java.awt.Dimension(400, 300));
 
@@ -248,6 +225,11 @@ public class GUIBudget extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
         };
+        cmbxGrund.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbxGrundActionPerformed(evt);
+            }
+        });
 
         lblCommentar.setText("Ihr Kommentar:");
 
@@ -294,10 +276,6 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(rbtnEinnahme)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(pnlGeldflussLayout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(btnSpeichern, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlGeldflussLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlGeldflussLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fldBetrag)
@@ -319,6 +297,10 @@ public class GUIBudget extends javax.swing.JFrame {
                     .addComponent(mydatechooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblDatum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGeldflussLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSpeichern, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
         );
         pnlGeldflussLayout.setVerticalGroup(
             pnlGeldflussLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,7 +321,7 @@ public class GUIBudget extends javax.swing.JFrame {
                     .addComponent(lblEuro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fldBetrag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(lblDatum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mydatechooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -351,11 +333,11 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(lblCommentar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrpanCommentar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addComponent(btnSpeichern)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSpeichern)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtErgebnis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Geldfluss", pnlGeldfluss);
@@ -429,15 +411,15 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(btnNameDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtFldNameErgebn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
                 .addComponent(lblNameInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNameOK)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtFldNameResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(126, 126, 126))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Personen", pnlPersonen);
@@ -541,7 +523,7 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(btnGeldGruppeEinfuegen)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtfldGeldgruppeInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Geldgruppe", pnlGeldgruppen);
@@ -578,9 +560,9 @@ public class GUIBudget extends javax.swing.JFrame {
             .addGroup(pnlGrafikLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(106, 106, 106)
+                .addGap(159, 159, 159)
                 .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
                 .addComponent(btnLineChartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(pnlOnlyGraph, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -588,7 +570,7 @@ public class GUIBudget extends javax.swing.JFrame {
         pnlGrafikLayout.setVerticalGroup(
             pnlGrafikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGrafikLayout.createSequentialGroup()
-                .addComponent(pnlOnlyGraph, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                .addComponent(pnlOnlyGraph, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
                 .addGap(15, 15, 15)
                 .addGroup(pnlGrafikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart)
@@ -626,7 +608,7 @@ public class GUIBudget extends javax.swing.JFrame {
         pnlTable.setLayout(pnlTableLayout);
         pnlTableLayout.setHorizontalGroup(
             pnlTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
             .addGroup(pnlTableLayout.createSequentialGroup()
                 .addGap(144, 144, 144)
                 .addComponent(btnTableAktual, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -638,41 +620,25 @@ public class GUIBudget extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTableAktual)
-                .addGap(0, 113, Short.MAX_VALUE))
+                .addGap(0, 76, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Tabelle", pnlTable);
         pnlTable.getAccessibleContext().setAccessibleName("grid");
 
         jMenu1.setText("File");
+
+        ExitMI.setText("Exit");
+        ExitMI.setMinimumSize(new java.awt.Dimension(10, 10));
+        ExitMI.setPreferredSize(new java.awt.Dimension(50, 25));
+        ExitMI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExitMIActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ExitMI);
+
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-
-        jmiNameDelete.setLabel("Person löschen");
-        jmiNameDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiNameDeleteActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jmiNameDelete);
-
-        jmiNameInsert.setLabel("Person hinzufügen");
-        jmiNameInsert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiNameInsertActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jmiNameInsert);
-        jMenu2.add(jSeparator1);
-
-        jmiAusgabeDelete.setLabel("Ausgabe löschen");
-        jMenu2.add(jmiAusgabeDelete);
-
-        jmiAusgabeInsert.setText("Ausgabe hinzufügen");
-        jMenu2.add(jmiAusgabeInsert);
-
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -687,8 +653,8 @@ public class GUIBudget extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         jTabbedPane3.getAccessibleContext().setAccessibleName("Personen verwalten");
@@ -765,10 +731,6 @@ public class GUIBudget extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnTableAktualActionPerformed
 
-    private void jmiNameDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiNameDeleteActionPerformed
-                
-    }//GEN-LAST:event_jmiNameDeleteActionPerformed
-
     private void btnNameDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNameDeleteActionPerformed
         setTextNull();
         if(listName.getSelectedValue() == null){
@@ -778,7 +740,7 @@ public class GUIBudget extends javax.swing.JFrame {
             try { 
                 Connection con = SQLiteConnection.getConnection();
                 SqlBefehl.deleteName((String)listName.getSelectedValue());
-                txtFldNameErgebn.setText("Ihr Datensatz wurde aufgenommen!");
+                txtFldNameErgebn.setText("Ihr Datensatz wurde gelöscht!");
                 txtFldName.setText("");
                 txtFldNameResult.setText("");
                 listName.setModel(new MyComboBoxModelName(con, "SQLiteProbe"));
@@ -790,22 +752,17 @@ public class GUIBudget extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnNameDeleteActionPerformed
 
-    private void jmiNameInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiNameInsertActionPerformed
-        createPerson.setVisible(true);
-    }//GEN-LAST:event_jmiNameInsertActionPerformed
-
     private void btnNameOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNameOKActionPerformed
         try {
             Connection con = SQLiteConnection.getConnection();
             MyComboBoxModelName cbm =new MyComboBoxModelName(con, "SQLiteProbe");
             List name2 = Arrays.asList(cbm.names);
             if(name2.contains(txtFldName.getText())){
-                txtFldNameResult.setText("\""+txtFldName.getText()+"\" existiert bereits!");
-                setTextNull(); 
+                txtFldNameResult.setText("\""+txtFldName.getText()+"\""+" existiert bereits!");                 
             }
-            if(txtFldName.getText().isEmpty()){
-                setTextNull(); 
-                txtFldNameResult.setText("Feld darf nicht leer sein!");
+            else if(txtFldName.getText().isEmpty()){    
+                setTextNull();
+                txtFldNameResult.setText("Feld darf nicht leer sein!");                
             }
             else{
                 try {
@@ -888,8 +845,8 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_rbtnEinnahmeVerwaltActionPerformed
 
     private void btnGeldGruppeLoeschenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeldGruppeLoeschenActionPerformed
-        setTextNull();
         if(lstGeldgruppe.getSelectedValue()== null){
+            setTextNull();
             txtfldGeldGruppeInfo.setText("Auswahl ist leer!");;
         }
         else{            
@@ -897,6 +854,7 @@ public class GUIBudget extends javax.swing.JFrame {
                 Connection con = SQLiteConnection.getConnection();
                 SqlBefehl.deleteGrund((String)lstGeldgruppe.getSelectedValue());
                 lstGeldgruppe.setModel( new MyComboBoxModelGrund(con, "SQLiteProbe") );
+                setTextNull();
                 txtfldGeldGruppeInfo.setText("Ihr Datensatz wurde gelöscht!");                
             } catch (SQLException ex) {
               Logger.getLogger(GUIBudget.class.getName()).log(Level.SEVERE, null, ex);
@@ -905,18 +863,19 @@ public class GUIBudget extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGeldGruppeLoeschenActionPerformed
 
     private void btnGeldGruppeEinfuegenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeldGruppeEinfuegenActionPerformed
-        setTextNull();
+        
         try {         
             Connection con = SQLiteConnection.getConnection();
             MyComboBoxModelGrund cbm = new MyComboBoxModelGrund(con, "SQLiteProbe");
-            List name2 = Arrays.asList(cbm.grunden);
+            List grund = Arrays.asList(cbm.grunden);
             if(txtfldGeldgruppeInsert.getText().isEmpty()){
+                setTextNull();
                 txtfldGeldgruppeInfo.setText("Feld darf nicht leer sein!");
             }
-            if(name2.contains(txtfldGeldgruppeInsert.getText())){
+            if(grund.contains(txtfldGeldgruppeInsert.getText())){
                 txtfldGeldgruppeInfo.setText("\""+txtfldGeldgruppeInsert.getText()+"\" existiert bereits!");
             }
-            else{
+            else {
 //                try {
                     if(rbtnAusgabeVerwalt.isSelected()){
                         SqlBefehl.insertGrund(txtfldGeldgruppeInsert.getText(),"Ausgabe");                        
@@ -925,7 +884,7 @@ public class GUIBudget extends javax.swing.JFrame {
                         SqlBefehl.insertGrund(txtfldGeldgruppeInsert.getText(),"Einnahme");
                         txtfldGeldgruppeInsert.setText("");
                     }
-                    txtfldGeldgruppeInsert.setText("");
+                    setTextNull();
                     txtfldGeldgruppeInfo.setText("Ihr Datensatz wurde aufgenommen!");
                     lstGeldgruppe.setModel( new MyComboBoxModelGrund(con, "SQLiteProbe") );
 //                } catch (SQLException ex) {
@@ -1034,6 +993,14 @@ public class GUIBudget extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLineChartActionPerformed
 
+    private void ExitMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitMIActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_ExitMIActionPerformed
+
+    private void cmbxGrundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbxGrundActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbxGrundActionPerformed
+
     private void setTextNull(){
         txtErgebnis.setText("");
         txtFldName.setText("");
@@ -1080,6 +1047,7 @@ public class GUIBudget extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ExitMI;
     private javax.swing.JTable FIO;
     private javax.swing.JButton btnBarChart;
     private javax.swing.JButton btnGeldGruppeEinfuegen;
@@ -1099,21 +1067,15 @@ public class GUIBudget extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JMenuItem jmiAusgabeDelete;
-    private javax.swing.JMenuItem jmiAusgabeInsert;
-    private javax.swing.JMenuItem jmiNameDelete;
-    private javax.swing.JMenuItem jmiNameInsert;
     private javax.swing.JLabel lblBetrag;
     private javax.swing.JLabel lblCommentar;
     private javax.swing.JLabel lblDatum;
